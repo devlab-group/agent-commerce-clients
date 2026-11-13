@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-commerce-client"
+version = "0.1.0"
+description = "Python buyer client for a self-hosted Agent Commerce Gateway: discovers resources and pays for them with x402 within set spending limits."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+keywords = ["x402", "agents", "payments", "api"]
+dependencies = [
+    "httpx>=0.28.1",
+    "x402[evm,httpx]>=2.28.0,<3",
+]
+
+[project.urls]
+Homepage = "https://acg.devlab.group"
+Repository = "https://github.com/devlab-group/agent-commerce-clients"
+Issues = "https://github.com/devlab-group/agent-commerce-clients/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_commerce_client"]

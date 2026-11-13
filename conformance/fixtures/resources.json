@@ -1,0 +1,134 @@
+{
+  "resources": [
+    {
+      "id": "report",
+      "name": "Demo Report",
+      "description": "Returns a small demo report.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "method": "POST",
+      "pricing": {
+        "type": "fixed",
+        "amount": "0.01",
+        "currency": "USDC"
+      },
+      "exposedVia": [
+        "http",
+        "mcp"
+      ],
+      "paymentMethods": [
+        "x402"
+      ]
+    },
+    {
+      "id": "weather_basic",
+      "name": "Basic Weather",
+      "description": "Current basic weather for a city.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city"
+        ],
+        "additionalProperties": false
+      },
+      "method": "GET",
+      "pricing": {
+        "type": "free"
+      },
+      "exposedVia": [
+        "http"
+      ],
+      "paymentMethods": []
+    },
+    {
+      "id": "mcp_only",
+      "name": "MCP Only Tool",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "method": "GET",
+      "pricing": {
+        "type": "fixed",
+        "amount": "0.05",
+        "currency": "USDC"
+      },
+      "exposedVia": [
+        "mcp"
+      ],
+      "paymentMethods": [
+        "x402"
+      ]
+    },
+    {
+      "id": "no_description",
+      "name": "Undescribed Paid Tool",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "method": "GET",
+      "pricing": {
+        "type": "fixed",
+        "amount": "0.02",
+        "currency": "USDC"
+      },
+      "exposedVia": [
+        "http"
+      ],
+      "paymentMethods": [
+        "x402"
+      ]
+    },
+    {
+      "id": "mpp_only",
+      "name": "MPP Only Tool",
+      "description": "Paid only through MPP.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "method": "GET",
+      "pricing": {
+        "type": "fixed",
+        "amount": "0.01",
+        "currency": "USDC"
+      },
+      "exposedVia": [
+        "http"
+      ],
+      "paymentMethods": [
+        "mpp"
+      ]
+    },
+    {
+      "id": "no_schema",
+      "name": "No Schema Tool",
+      "method": "GET",
+      "pricing": {
+        "type": "free"
+      },
+      "exposedVia": [
+        "http",
+        "mcp"
+      ],
+      "paymentMethods": [],
+      "description": "Free tool without a schema!"
+    }
+  ]
+}

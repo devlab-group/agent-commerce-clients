@@ -1,0 +1,46 @@
+{
+  "name": "@devlab.group/agent-commerce-client",
+  "version": "0.1.0",
+  "description": "Buyer-side client for Agent Commerce Gateways: discover resources and pay for them with x402 within spending limits",
+  "keywords": [
+    "x402",
+    "payments",
+    "agents",
+    "api",
+    "usdc"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devlab-group/agent-commerce-clients.git",
+    "directory": "typescript/agent-commerce-client"
+  },
+  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/main/typescript/agent-commerce-client#readme",
+  "bugs": "https://github.com/devlab-group/agent-commerce-clients/issues",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@x402/evm": "2.31.0",
+    "@x402/fetch": "2.31.0"
+  }
+}

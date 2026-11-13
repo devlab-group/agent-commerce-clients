@@ -1,0 +1,44 @@
+# Both buyer cores run the shared conformance suite in conformance/, plus the
+# wrapper tests. The end-to-end tests need a running gateway and stay opt-in
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv sync --all-packages --locked -p 3.12
+      - run: uvx ruff check . && uvx ruff format --check .
+      - run: uv run -p 3.12 pytest agent-commerce-client langchain-agent-commerce agent-framework-agent-commerce
+
+  typescript:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: typescript
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+
+  internal-refs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Item codes and section numbers of the internal planning notes stay out of tracked files.
+      # This file holds the pattern itself and is left out.
+      - run: "! git grep -nIwE 'K[1-7]|spec section' -- ':!.github/workflows/ci.yml'"

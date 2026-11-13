@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-framework-agent-commerce"
+version = "0.1.0"
+description = "Tools that let agents call and pay for API endpoints behind a self-hosted Agent Commerce Gateway with x402, within set spending limits."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+keywords = ["microsoft-agent-framework", "x402", "agents", "payments", "api"]
+dependencies = [
+    "agent-commerce-client>=0.1.0,<0.2",
+    "agent-framework-core>=1.26.0,<2",
+]
+
+[project.urls]
+Homepage = "https://acg.devlab.group"
+Documentation = "https://acg.devlab.group/docs/integrations/microsoft-agent-framework"
+Repository = "https://github.com/devlab-group/agent-commerce-clients"
+Issues = "https://github.com/devlab-group/agent-commerce-clients/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_framework_agent_commerce"]

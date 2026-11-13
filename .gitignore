@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.benchmarks/
+.coverage
+coverage/
+.playwright-mcp/
+*.egg-info/
+.env
+.env.*
+.claude/settings.local.json
+.internal-docs

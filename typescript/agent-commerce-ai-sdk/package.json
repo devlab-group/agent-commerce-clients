@@ -1,0 +1,53 @@
+{
+  "name": "@devlab.group/agent-commerce-ai-sdk",
+  "version": "0.1.0",
+  "description": "Vercel AI SDK tools that call and pay for resources behind an Agent Commerce Gateway with x402, within spending limits",
+  "keywords": [
+    "ai-sdk",
+    "vercel-ai-sdk",
+    "x402",
+    "payments",
+    "agents",
+    "api",
+    "tools"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devlab-group/agent-commerce-clients.git",
+    "directory": "typescript/agent-commerce-ai-sdk"
+  },
+  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/main/typescript/agent-commerce-ai-sdk#readme",
+  "bugs": "https://github.com/devlab-group/agent-commerce-clients/issues",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@devlab.group/agent-commerce-client": "^0.1.0"
+  },
+  "peerDependencies": {
+    "ai": "^7.0.0"
+  },
+  "devDependencies": {
+    "ai": "7.0.172"
+  }
+}

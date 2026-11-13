@@ -1,0 +1,36 @@
+{
+  "x402Version": 2,
+  "resource": {
+    "url": "resource://agent-commerce/eip155%3A84532/0x1111111111111111111111111111111111111111/resources/report",
+    "description": "Returns a small demo report.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "amount": "10000",
+      "payTo": "0x1111111111111111111111111111111111111111",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USDC",
+        "version": "2",
+        "assetTransferMethod": "eip3009"
+      }
+    },
+    {
+      "scheme": "exact",
+      "network": "eip155:84532",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "amount": "10000",
+      "payTo": "0x1111111111111111111111111111111111111111",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USDC",
+        "version": "2",
+        "assetTransferMethod": "eip3009"
+      }
+    }
+  ]
+}

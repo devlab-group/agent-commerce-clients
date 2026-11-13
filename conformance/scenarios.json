@@ -1,0 +1,1089 @@
+{
+  "version": 1,
+  "testSignerPrivateKey": "0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6",
+  "testSignerAddress": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
+  "defaults": {
+    "gatewayUrl": "https://merchant.example.com",
+    "networks": [
+      "eip155:84532"
+    ],
+    "maxPerCall": "0.05",
+    "maxPerDay": "1.00"
+  },
+  "config": [
+    {
+      "name": "defaults are valid",
+      "config": {},
+      "expect": "ok"
+    },
+    {
+      "name": "local Anvil chain counts as a testnet",
+      "config": {
+        "networks": [
+          "eip155:31337"
+        ]
+      },
+      "expect": "ok"
+    },
+    {
+      "name": "mainnet without allowMainnet is refused",
+      "config": {
+        "networks": [
+          "eip155:8453"
+        ]
+      },
+      "expect": "error"
+    },
+    {
+      "name": "mainnet with allowMainnet is accepted",
+      "config": {
+        "networks": [
+          "eip155:8453"
+        ],
+        "allowMainnet": true
+      },
+      "expect": "ok"
+    },
+    {
+      "name": "unknown chain is refused",
+      "config": {
+        "networks": [
+          "eip155:999999"
+        ]
+      },
+      "expect": "error"
+    },
+    {
+      "name": "unknown chain is refused even with allowMainnet",
+      "config": {
+        "networks": [
+          "eip155:999999"
+        ],
+        "allowMainnet": true
+      },
+      "expect": "error"
+    },
+    {
+      "name": "non-EVM network is refused",
+      "config": {
+        "networks": [
+          "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+        ]
+      },
+      "expect": "error"
+    },
+    {
+      "name": "empty networks is refused",
+      "config": {
+        "networks": []
+      },
+      "expect": "error"
+    },
+    {
+      "name": "missing gatewayUrl is refused",
+      "config": {
+        "gatewayUrl": null
+      },
+      "expect": "error"
+    },
+    {
+      "name": "non-numeric limit is refused",
+      "config": {
+        "maxPerCall": "abc"
+      },
+      "expect": "error"
+    },
+    {
+      "name": "negative limit is refused",
+      "config": {
+        "maxPerDay": "-1"
+      },
+      "expect": "error"
+    },
+    {
+      "name": "more than 6 decimals is refused",
+      "config": {
+        "maxPerCall": "0.0000001"
+      },
+      "expect": "error"
+    },
+    {
+      "name": "unknown approval mode is refused",
+      "config": {
+        "approval": "sometimes"
+      },
+      "expect": "error"
+    }
+  ],
+  "discovery": [
+    {
+      "name": "keeps http resources that are free or paid through x402",
+      "config": {},
+      "resources": "resources.json",
+      "expect": {
+        "tools": [
+          {
+            "name": "report",
+            "description": "Returns a small demo report. Costs 0.01 USDC per call.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "topic": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "paid": true,
+            "needsApproval": true
+          },
+          {
+            "name": "weather_basic",
+            "description": "Current basic weather for a city. Free.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "paid": false,
+            "needsApproval": false
+          },
+          {
+            "name": "no_description",
+            "description": "Undescribed Paid Tool. Costs 0.02 USDC per call.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "paid": true,
+            "needsApproval": true
+          },
+          {
+            "name": "no_schema",
+            "description": "Free tool without a schema! Free.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "paid": false,
+            "needsApproval": false
+          }
+        ],
+        "skipped": [
+          "mcp_only",
+          "mpp_only"
+        ]
+      }
+    },
+    {
+      "name": "resources allowlist keeps only listed eligible ids",
+      "config": {
+        "resources": [
+          "report",
+          "mcp_only",
+          "missing_id"
+        ]
+      },
+      "resources": "resources.json",
+      "expect": {
+        "toolNames": [
+          "report"
+        ],
+        "skipped": [
+          "weather_basic",
+          "mcp_only",
+          "no_description",
+          "mpp_only",
+          "no_schema"
+        ]
+      }
+    },
+    {
+      "name": "approval always marks every tool",
+      "config": {
+        "approval": "always"
+      },
+      "resources": "resources.json",
+      "expect": {
+        "needsApproval": {
+          "report": true,
+          "weather_basic": true,
+          "no_description": true,
+          "no_schema": true
+        }
+      }
+    },
+    {
+      "name": "approval never marks no tool",
+      "config": {
+        "approval": "never"
+      },
+      "resources": "resources.json",
+      "expect": {
+        "needsApproval": {
+          "report": false,
+          "weather_basic": false,
+          "no_description": false,
+          "no_schema": false
+        }
+      }
+    },
+    {
+      "name": "unreachable gateway during discovery",
+      "config": {},
+      "response": {
+        "networkError": true
+      },
+      "expect": {
+        "error": {
+          "code": "GATEWAY_UNREACHABLE"
+        }
+      }
+    },
+    {
+      "name": "discovery 5xx",
+      "config": {},
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "error",
+          "code": "INTERNAL_ERROR",
+          "message": "Internal error"
+        }
+      },
+      "expect": {
+        "error": {
+          "code": "BACKEND_ERROR",
+          "status": 500
+        }
+      }
+    }
+  ],
+  "invocations": [
+    {
+      "name": "free call needs no payment",
+      "config": {},
+      "call": {
+        "resource": "weather_basic",
+        "input": {
+          "city": "Berlin"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "body": {
+            "ok": true,
+            "url": "/api/weather/Berlin"
+          }
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "result": {
+          "status": 200,
+          "body": {
+            "ok": true,
+            "url": "/api/weather/Berlin"
+          },
+          "payment": null
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "non-JSON body is returned as text even when it parses as JSON",
+      "config": {},
+      "call": {
+        "resource": "weather_basic",
+        "input": {
+          "city": "Berlin"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "text": "42",
+          "headers": {
+            "content-type": "text/plain; charset=utf-8"
+          }
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "result": {
+          "status": 200,
+          "body": "42",
+          "payment": null
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "JSON content type with a body that does not parse is returned as text",
+      "config": {},
+      "call": {
+        "resource": "weather_basic",
+        "input": {
+          "city": "Berlin"
+        }
+      },
+      "responses": [
+        {
+          "status": 200,
+          "text": "{not json",
+          "headers": {
+            "content-type": "application/json"
+          }
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "result": {
+          "status": 200,
+          "body": "{not json",
+          "payment": null
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "paid call within limits pays once",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 200,
+          "body": {
+            "ok": true,
+            "url": "/api/report"
+          },
+          "paymentResponse": "payment-response.json"
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "signedOffer": {
+          "network": "eip155:84532",
+          "amount": "10000",
+          "payTo": "0x1111111111111111111111111111111111111111"
+        },
+        "result": {
+          "status": 200,
+          "body": {
+            "ok": true,
+            "url": "/api/report"
+          },
+          "payment": "payment-response.json"
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "price above maxPerCall is refused before signing",
+      "config": {
+        "maxPerCall": "0.005"
+      },
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "LIMIT_EXCEEDED"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "price above remaining daily allowance is refused before signing",
+      "config": {},
+      "spentToday": "0.995",
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "LIMIT_EXCEEDED"
+        },
+        "spentAfter": "0.995"
+      }
+    },
+    {
+      "name": "price exactly filling the daily allowance is allowed",
+      "config": {},
+      "spentToday": "0.99",
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "paymentResponse": "payment-response.json"
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "result": {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "payment": "payment-response.json"
+        },
+        "spentAfter": "1"
+      }
+    },
+    {
+      "name": "offer on a network outside networks is refused",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required-sepolia.json",
+          "bodyFixture": "payment-required-body.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "NETWORK_NOT_ALLOWED"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "mainnet offer is skipped for an allowed testnet offer",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required-multi.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "paymentResponse": "payment-response.json"
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "signedOffer": {
+          "network": "eip155:84532",
+          "amount": "10000",
+          "payTo": "0x1111111111111111111111111111111111111111"
+        },
+        "result": {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "payment": "payment-response.json"
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "offer in an asset other than the network USDC is refused before signing",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "bodyFixture": "payment-required-body.json",
+          "paymentRequired": "payment-required-wrong-asset.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "NETWORK_NOT_ALLOWED"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "non-USDC offer is skipped for a USDC offer on the same network",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "bodyFixture": "payment-required-body.json",
+          "paymentRequired": "payment-required-mixed-asset.json"
+        },
+        {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "paymentResponse": "payment-response.json"
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "signedOffer": {
+          "network": "eip155:84532",
+          "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "amount": "10000",
+          "payTo": "0x1111111111111111111111111111111111111111"
+        },
+        "result": {
+          "status": 200,
+          "body": {
+            "ok": true
+          },
+          "payment": "payment-response.json"
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "offer with a scheme other than exact is refused before signing",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "bodyFixture": "payment-required-body.json",
+          "paymentRequired": "payment-required-upto.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "NETWORK_NOT_ALLOWED"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "offer with a transfer method other than eip3009 is refused before signing",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "bodyFixture": "payment-required-body.json",
+          "paymentRequired": "payment-required-permit2.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "NETWORK_NOT_ALLOWED"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "rejected payment is not retried",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 402,
+          "paymentRequired": "payment-required-rejected.json",
+          "bodyFixture": "payment-rejected-body.json"
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageExcludes": [
+            "may still complete"
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "failed settlement is not retried",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 402,
+          "paymentResponse": "payment-response-failed.json",
+          "body": {
+            "status": "error",
+            "code": "PAYMENT_SETTLEMENT_FAILED",
+            "message": "Payment settlement failed",
+            "retryable": false
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageExcludes": [
+            "may still complete"
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "unconfirmed settlement with a hash is reported as possibly complete",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 502,
+          "paymentResponse": "payment-response-pending.json",
+          "body": {
+            "status": "error",
+            "code": "PAYMENT_SETTLEMENT_FAILED",
+            "message": "Settlement could not be confirmed",
+            "retryable": false,
+            "requestId": "req_00000000-0000-4000-8000-000000000000",
+            "resourceId": "report",
+            "details": {
+              "settlementUncertain": true,
+              "transactionHash": "0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+              "network": "eip155:84532",
+              "payer": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720"
+            }
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageContains": [
+            "may still complete on chain",
+            "tx 0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd"
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "unconfirmed settlement without a hash is reported as possibly complete",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 502,
+          "paymentResponse": "payment-response-uncertain.json",
+          "body": {
+            "status": "error",
+            "code": "PAYMENT_SETTLEMENT_FAILED",
+            "message": "Settlement could not be confirmed",
+            "retryable": false,
+            "requestId": "req_00000000-0000-4000-8000-000000000000",
+            "resourceId": "report",
+            "details": {
+              "settlementUncertain": true,
+              "network": "eip155:84532",
+              "payer": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720"
+            }
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageContains": [
+            "may still complete on chain"
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "transaction text that is not a hash is not echoed",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 502,
+          "paymentResponse": "payment-response-untrusted.json",
+          "body": {
+            "status": "error",
+            "code": "PAYMENT_SETTLEMENT_FAILED",
+            "message": "Settlement could not be confirmed",
+            "retryable": false,
+            "requestId": "req_00000000-0000-4000-8000-000000000000",
+            "resourceId": "report",
+            "details": {
+              "settlementUncertain": true,
+              "transactionHash": "0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+              "network": "eip155:84532",
+              "payer": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720"
+            }
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageContains": [
+            "may still complete on chain",
+            "(settlement_pending)"
+          ],
+          "messageExcludes": [
+            "ignore",
+            "tx "
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "failed settlement on a 2xx reply is reported as possibly complete",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 200,
+          "paymentResponse": "payment-response-uncertain.json",
+          "body": {
+            "ok": true
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "PAYMENT_FAILED",
+          "messageContains": [
+            "may still complete on chain"
+          ]
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "backend 5xx after payment is not retried",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "status": 502,
+          "body": {
+            "status": "error",
+            "code": "BACKEND_ERROR",
+            "message": "Backend returned an error",
+            "retryable": false
+          }
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "BACKEND_ERROR",
+          "status": 502
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "gateway unreachable after payment is not retried",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 402,
+          "paymentRequired": "payment-required.json",
+          "bodyFixture": "payment-required-body.json"
+        },
+        {
+          "networkError": true
+        }
+      ],
+      "expect": {
+        "requests": 2,
+        "signatures": 1,
+        "error": {
+          "code": "GATEWAY_UNREACHABLE"
+        },
+        "spentAfter": "0.01"
+      }
+    },
+    {
+      "name": "invalid input is a backend error with status",
+      "config": {},
+      "call": {
+        "resource": "weather_basic",
+        "input": {
+          "town": 1
+        }
+      },
+      "responses": [
+        {
+          "status": 400,
+          "bodyFixture": "error-input-invalid.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "BACKEND_ERROR",
+          "status": 400
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "unknown resource is a backend error with status",
+      "config": {},
+      "call": {
+        "resource": "nope",
+        "input": {}
+      },
+      "responses": [
+        {
+          "status": 404,
+          "bodyFixture": "error-not-found.json"
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "BACKEND_ERROR",
+          "status": 404
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "unreachable gateway",
+      "config": {},
+      "call": {
+        "resource": "weather_basic",
+        "input": {
+          "city": "Berlin"
+        }
+      },
+      "responses": [
+        {
+          "networkError": true
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "GATEWAY_UNREACHABLE"
+        },
+        "spentAfter": "0"
+      }
+    },
+    {
+      "name": "redirect on invoke is not followed",
+      "config": {},
+      "call": {
+        "resource": "report",
+        "input": {
+          "topic": "x"
+        }
+      },
+      "responses": [
+        {
+          "status": 307,
+          "headers": {
+            "location": "https://elsewhere.example.com/pay"
+          },
+          "body": {}
+        }
+      ],
+      "expect": {
+        "requests": 1,
+        "signatures": 0,
+        "error": {
+          "code": "BACKEND_ERROR",
+          "status": 307
+        },
+        "spentAfter": "0"
+      }
+    }
+  ]
+}

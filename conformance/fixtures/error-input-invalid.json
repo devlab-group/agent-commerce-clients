@@ -1,0 +1,20 @@
+{
+  "status": "error",
+  "code": "INPUT_INVALID",
+  "message": "Input for resource \"weather_basic\" failed validation",
+  "retryable": false,
+  "requestId": "req_853221b4-51f3-4733-a6c1-2d65ea476bf5",
+  "resourceId": "weather_basic",
+  "details": {
+    "errors": [
+      {
+        "path": "$.city",
+        "message": "is required"
+      },
+      {
+        "path": "$.town",
+        "message": "additional property not allowed"
+      }
+    ]
+  }
+}

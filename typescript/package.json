@@ -1,0 +1,22 @@
+{
+  "name": "agent-commerce-clients-typescript",
+  "private": true,
+  "description": "Development workspace for the Agent Commerce TypeScript buyer packages",
+  "workspaces": [
+    "agent-commerce-client",
+    "agent-commerce-ai-sdk"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "npm run build && npm run typecheck && vitest run",
+    "test:e2e": "npm run build && ACG_E2E=1 vitest run agent-commerce-ai-sdk/test/e2e.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@vitest/coverage-v8": "5.1.0",
+    "typescript": "7.0.2",
+    "viem": "2.57.19",
+    "vitest": "5.1.0"
+  }
+}
