@@ -1,6 +1,6 @@
 {
   "name": "@devlab.group/agent-commerce-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Buyer-side client for Agent Commerce Gateways: discover resources and pay for them with x402 within spending limits",
   "keywords": [
     "x402",
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/devlab-group/agent-commerce-clients.git",
     "directory": "typescript/agent-commerce-client"
   },
-  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/main/typescript/agent-commerce-client#readme",
+  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/master/typescript/agent-commerce-client#readme",
   "bugs": "https://github.com/devlab-group/agent-commerce-clients/issues",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@devlab.group/agent-commerce-ai-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vercel AI SDK tools that call and pay for resources behind an Agent Commerce Gateway with x402, within spending limits",
   "keywords": [
     "ai-sdk",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/devlab-group/agent-commerce-clients.git",
     "directory": "typescript/agent-commerce-ai-sdk"
   },
-  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/main/typescript/agent-commerce-ai-sdk#readme",
+  "homepage": "https://github.com/devlab-group/agent-commerce-clients/tree/master/typescript/agent-commerce-ai-sdk#readme",
   "bugs": "https://github.com/devlab-group/agent-commerce-clients/issues",
   "type": "module",
   "main": "./dist/index.js",
