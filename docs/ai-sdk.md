@@ -133,7 +133,7 @@ the generation continues. The codes are `LIMIT_EXCEEDED`, `NETWORK_NOT_ALLOWED`,
 
 - [Buyer core contract](https://acg.devlab.group/docs/integrations/buyer-core): configuration, discovery, spending
   limits, errors
-- [Package README](https://github.com/devlab-group/agent-commerce-clients/tree/main/typescript/agent-commerce-ai-sdk#readme)
+- [Package README](https://github.com/devlab-group/agent-commerce-clients/tree/master/typescript/agent-commerce-ai-sdk#readme)
 
 ## End-to-end evidence
 
