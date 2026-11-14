@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-commerce-client"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python buyer client for a self-hosted Agent Commerce Gateway: discovers resources and pays for them with x402 within set spending limits."
 readme = "README.md"
 license = "Apache-2.0"

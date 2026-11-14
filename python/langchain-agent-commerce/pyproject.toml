@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain-agent-commerce"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tools that let agents call and pay for API endpoints behind a self-hosted Agent Commerce Gateway with x402, within set spending limits."
 readme = "README.md"
 license = "Apache-2.0"

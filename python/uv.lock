@@ -24,7 +24,7 @@ dev = [
 
 [[package]]
 name = "agent-commerce-client"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "agent-commerce-client" }
 dependencies = [
     { name = "httpx" },
@@ -39,7 +39,7 @@ requires-dist = [
 
 [[package]]
 name = "agent-framework-agent-commerce"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "agent-framework-agent-commerce" }
 dependencies = [
     { name = "agent-commerce-client" },
@@ -1159,7 +1159,7 @@ wheels = [
 
 [[package]]
 name = "langchain-agent-commerce"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "langchain-agent-commerce" }
 dependencies = [
     { name = "agent-commerce-client" },
