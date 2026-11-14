@@ -6,7 +6,7 @@ Framework tools for discovering and paying for API endpoints behind a self-hoste
 `agent_commerce_tools()` turns the resources of a gateway into Microsoft Agent Framework `FunctionTool`s.
 [`agent-commerce-client`](../agent-commerce-client) handles payments, limits and filtering; this package maps its
 resource descriptions to tools and sets their approval mode. The behavior contract is in
-[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/main/docs/buyer-core.md).
+[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/master/docs/buyer-core.md).
 
 Documentation: <https://acg.devlab.group/docs/integrations/microsoft-agent-framework>.
 

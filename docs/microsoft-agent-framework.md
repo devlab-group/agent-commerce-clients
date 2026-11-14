@@ -81,9 +81,9 @@ Local demo stack (gateway `http://127.0.0.1:8080`, Anvil `eip155:31337`, MockUSD
 | Price within the limit | Tool result returned; tx `0x4d59bdade92f893f31d1c7b72b581f68c9730899709aa751abeee1f2b03b1447`; buyer balance 99880000 to 99870000 base units (-10000) |
 | `max_per_call="0.005"` | `Error: LIMIT_EXCEEDED: Price 0.01 USDC exceeds the per-call limit of 0.005 USDC`; balance unchanged; receipt list unchanged                          |
 
-Base Sepolia (`eip155:84532`), 2026-11-13: the demo merchant from ACG's `deploy/testnet-demo` run locally (gateway
-2.7.1, public facilitator `https://x402.org/facilitator`, Circle USDC, `report` at 0.01 USDC, a temporary merchant
-wallet as `payTo`).
+Base Sepolia (`eip155:84532`), 2026-11-13: the demo merchant from ACG's `deploy/testnet-demo` run locally (gateway 2.7.1
+in a locally built image, before the demo moved to the published 2.7.2 image; public facilitator
+`https://x402.org/facilitator`, Circle USDC, `report` at 0.01 USDC, a temporary merchant wallet as `payTo`).
 
 | Case                   | Result                                                                                                                                                                                                                                                      |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

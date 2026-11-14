@@ -149,9 +149,9 @@ only on the local chain.
 | Same, third run (after the USDC and transfer-method offer checks) | Status 200, tx `0x0109c19bbd56493b7f66ec9f7ab17144d7f9bb3901d4cbc3ad826428f26b7878`; buyer balance 99870000 to 99860000 base units                                                            |
 | Price above limit (`maxPerCall: '0.005'`)                         | `LIMIT_EXCEEDED` before signing; buyer balance unchanged (99860000 in the latest run); gateway receipt list unchanged (17 before, 17 after in the latest run)                                 |
 
-Base Sepolia (`eip155:84532`), 2026-11-13: the demo merchant from ACG's `deploy/testnet-demo` run locally (gateway
-2.7.1, public facilitator `https://x402.org/facilitator`, Circle USDC, `report` at 0.01 USDC, a temporary merchant
-wallet as `payTo`).
+Base Sepolia (`eip155:84532`), 2026-11-13: the demo merchant from ACG's `deploy/testnet-demo` run locally (gateway 2.7.1
+in a locally built image, before the demo moved to the published 2.7.2 image; public facilitator
+`https://x402.org/facilitator`, Circle USDC, `report` at 0.01 USDC, a temporary merchant wallet as `payTo`).
 
 | Case                                      | Result                                                                                                                                                                                                                                                               |
 | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -7,7 +7,7 @@ The framework packages build on this client and add no payment logic of their ow
 [`langchain-agent-commerce`](../langchain-agent-commerce) and
 [`agent-framework-agent-commerce`](../agent-framework-agent-commerce) (Microsoft Agent Framework). The full behavior
 contract, shared with the TypeScript client, is in
-[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/main/docs/buyer-core.md).
+[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/master/docs/buyer-core.md).
 
 ## Install
 

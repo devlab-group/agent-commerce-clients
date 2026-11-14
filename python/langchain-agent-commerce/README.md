@@ -6,7 +6,7 @@ Framework tools for discovering and paying for API endpoints behind a self-hoste
 `AgentCommerceToolkit` turns the resources of a gateway into LangChain tools.
 [`agent-commerce-client`](../agent-commerce-client) handles payments, limits and filtering; this package maps its
 resource descriptions to `StructuredTool`s and builds the human-approval middleware. The behavior contract is in
-[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/main/docs/buyer-core.md).
+[docs/buyer-core.md](https://github.com/devlab-group/agent-commerce-clients/blob/master/docs/buyer-core.md).
 
 Documentation: <https://acg.devlab.group/docs/integrations/langchain>.
 
